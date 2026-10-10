@@ -1,0 +1,431 @@
+<title>Esquerda vs Direita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&display=swap">
+<style>
+/* Layout: telas em camadas sobre um fundo animado; na luta, arena 16:9 + barra de comandos fixa embaixo */
+:root {
+  --ink: #0c0912; --panel: #17121f; --panel-2: #221a2e; --line: #3a2f4a;
+  --text: #f5f1ff; --muted: #a99fbd;
+  --red: #e3262f; --red-2: #ff5a4d; --red-dk: #4a0b10;
+  --blue: #1f6fe0; --blue-2: #3fa9ff; --blue-dk: #0a2148;
+  --green: #1ea54b; --yellow: #ffd21f; --orange: #ff8a1f;
+  --display: 'Bangers', 'Futura-CondensedExtraBold', Impact, 'Arial Black', sans-serif;
+  --ui: 'Barlow Condensed', 'AvenirNextCondensed-DemiBold', 'Avenir Next Condensed', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --safe-l: env(safe-area-inset-left, 0px); --safe-r: env(safe-area-inset-right, 0px);
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text); font-family: var(--ui); font-size: 16px; overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
+button { font-family: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+#bg { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.screen { position: fixed; inset: 0; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* ---------- MENU ---------- */
+.menu { display: grid; place-items: center; padding-inline: max(16px, var(--safe-l)) max(16px, var(--safe-r)); }
+.menu-inner { display: flex; flex-direction: column; align-items: center; gap: clamp(14px, 3vh, 28px); text-align: center; }
+.logo { font-family: var(--display); line-height: .82; letter-spacing: .02em; display: flex; flex-direction: column; align-items: center; transform: rotate(-3deg); }
+.logo .l1, .logo .l3 { font-size: clamp(54px, 11vw, 132px); -webkit-text-stroke: 3px #0c0912; paint-order: stroke fill; filter: drop-shadow(0 6px 0 #0c0912); }
+.logo .l1 { background: linear-gradient(#ffd0c4, var(--red) 45%, #8f1219); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo .l3 { background: linear-gradient(#d6f0ff, var(--blue-2) 40%, var(--blue) 60%, #0b3a8a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo .vs { font-size: clamp(60px, 12vw, 150px); color: var(--yellow); -webkit-text-stroke: 3px #0c0912; paint-order: stroke fill; text-shadow: 0 0 30px rgba(255,140,30,.8), 0 6px 0 #0c0912; transform: skewX(-10deg); margin: -.12em 0; animation: vsPulse 1.6s ease-in-out infinite; }
+@keyframes vsPulse { 50% { transform: skewX(-10deg) scale(1.08); } }
+.tagline { font-family: var(--display); font-size: clamp(18px, 2.6vw, 28px); letter-spacing: .06em; background: #0c0912; padding: .2em .9em; transform: skewX(-12deg); border-left: 5px solid var(--red); border-right: 5px solid var(--blue); }
+.menu-buttons { display: flex; flex-direction: column; gap: 12px; width: min(340px, 86vw); }
+.btn { position: relative; font-family: var(--display); font-size: clamp(24px, 3.2vw, 34px); letter-spacing: .06em; padding: .32em 1em; border: 3px solid #0c0912; background: linear-gradient(180deg, #2f2540, #1b1426); color: var(--text); transform: skewX(-10deg); box-shadow: 0 5px 0 #0c0912; transition: transform .12s, background .12s, box-shadow .12s; }
+.btn > span { display: inline-block; transform: skewX(10deg); }
+.btn:hover, .btn:focus-visible { background: linear-gradient(90deg, var(--red) 0%, #7a1fa0 50%, var(--blue) 100%); transform: skewX(-10deg) translateY(-2px) scale(1.03); }
+.btn:active { transform: skewX(-10deg) translateY(3px); box-shadow: 0 2px 0 #0c0912; }
+.btn.primary { background: linear-gradient(180deg, #ffe46a, var(--yellow) 50%, #e89a00); color: #1a1000; }
+.btn.primary:hover { background: linear-gradient(180deg, #fff2a8, #ffd84a); }
+.btn.small { font-size: 22px; padding: .2em .8em; }
+.disclaimer { max-width: 560px; color: var(--muted); font-size: 15px; line-height: 1.35; font-weight: 600; }
+.disclaimer b { color: var(--text); }
+
+/* ---------- SELEÇÃO ---------- */
+.select { display: flex; flex-direction: column; padding-block: 14px; padding-inline: max(16px, var(--safe-l)) max(16px, var(--safe-r)); gap: 12px; overflow-y: auto; }
+.sel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sel-title { font-family: var(--display); font-size: clamp(30px, 4.4vw, 52px); letter-spacing: .04em; margin: 0; -webkit-text-stroke: 2px #0c0912; paint-order: stroke fill; color: var(--yellow); transform: skewX(-8deg); text-wrap: balance; }
+.sel-grid { flex: 1 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.9fr); gap: 14px; align-items: start; }
+.panel { background: rgba(23,18,31,.88); border: 2px solid var(--line); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; backdrop-filter: blur(4px); }
+.panel h3 { margin: 0; font-family: var(--display); font-size: 22px; letter-spacing: .08em; color: var(--muted); font-weight: 400; }
+.preview { position: relative; background: radial-gradient(circle at 50% 70%, var(--glow, rgba(255,60,50,.4)), transparent 65%); border-radius: 4px; }
+.preview canvas { width: 100%; max-width: calc(34vh * 4 / 3); height: auto; display: block; aspect-ratio: 4 / 3; margin-inline: auto; }
+.who { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.who .nm { font-family: var(--display); font-size: clamp(28px, 3vw, 40px); letter-spacing: .03em; line-height: 1; }
+.chip { font-family: var(--display); font-size: 18px; letter-spacing: .1em; padding: 2px 10px; transform: skewX(-10deg); background: var(--c, var(--red)); color: #fff; border: 2px solid #0c0912; }
+.desc { margin: 0; color: #d6cde6; font-size: 17px; line-height: 1.3; font-weight: 600; max-width: 62ch; }
+.desc i { color: var(--muted); }
+.stats { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 10px; align-items: center; font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: .06em; }
+.stat-bar { height: 12px; background: #0c0912; border: 2px solid #0c0912; display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; }
+.stat-bar i { background: #2d2438; }
+.stat-bar i.on { background: var(--c, var(--red)); box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); }
+.stats .v { font-variant-numeric: tabular-nums; color: var(--muted); }
+.moves { display: grid; gap: 6px; }
+.move { display: grid; grid-template-columns: 42px 1fr auto; gap: 10px; align-items: center; background: rgba(12,9,18,.6); padding: 5px 8px; border-left: 4px solid var(--c, var(--red)); }
+.move img { width: 42px; height: 42px; }
+.move .mn { font-weight: 800; font-size: 17px; line-height: 1.05; }
+.move .me { color: var(--muted); font-weight: 600; font-size: 14px; }
+.move .mc { font-weight: 700; font-size: 14px; text-align: right; color: var(--yellow); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.move.super { border-left-color: var(--yellow); background: linear-gradient(90deg, rgba(255,210,31,.16), rgba(12,9,18,.6)); }
+.roster { display: flex; flex-direction: column; gap: 12px; }
+.fac-label { font-family: var(--display); letter-spacing: .12em; font-size: 22px; display: flex; align-items: center; gap: 8px; }
+.fac-label::after { content: ''; flex: 1; height: 3px; background: currentColor; opacity: .5; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 150px)); gap: 10px; }
+.card { position: relative; padding: 0; border: 3px solid #0c0912; background: var(--panel-2); aspect-ratio: 1; overflow: hidden; transition: transform .12s, box-shadow .12s; box-shadow: 0 4px 0 #0c0912; }
+.card img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.card .cn { position: absolute; left: 0; right: 0; bottom: 0; font-family: var(--display); font-size: 20px; letter-spacing: .06em; background: linear-gradient(transparent, rgba(0,0,0,.85)); padding: 18px 6px 4px; text-align: center; }
+.card:hover { transform: translateY(-3px); }
+.card.p1 { outline: 4px solid var(--yellow); outline-offset: -1px; box-shadow: 0 0 0 7px rgba(255,210,31,.35), 0 4px 0 #0c0912; }
+.card.cpu::before { content: 'CPU'; position: absolute; top: 4px; right: 4px; z-index: 1; font-family: var(--display); font-size: 16px; background: var(--blue); color: #fff; padding: 0 6px; border: 2px solid #0c0912; }
+.card.p1::after { content: 'P1'; position: absolute; top: 4px; left: 4px; font-family: var(--display); font-size: 16px; background: var(--yellow); color: #0c0912; padding: 0 6px; border: 2px solid #0c0912; }
+.roster-note { color: var(--muted); font-size: 14px; font-weight: 600; margin: 0; }
+.cpu-pick { display: flex; align-items: center; gap: 8px; }
+.cpu-pick .who { flex: 1; justify-content: center; }
+.arrow { width: 46px; height: 46px; font-family: var(--display); font-size: 26px; border: 3px solid #0c0912; background: var(--panel-2); box-shadow: 0 3px 0 #0c0912; }
+.arrow:hover { background: var(--blue); }
+.sel-foot { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+.select .sel-foot { position: sticky; bottom: 0; padding-block: 8px 4px; }
+.howto { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-weight: 600; font-size: 15px; color: #d6cde6; align-items: center; margin: 0; }
+.howto dt { white-space: nowrap; }
+.howto dd { margin: 0; }
+.gallery .cpu-col, .gallery .confirm-btn { display: none; }
+.gallery .sel-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+
+/* ---------- CONFIGURAÇÕES ---------- */
+.settings { display: grid; place-items: center; padding-block: 16px; padding-inline: max(16px, var(--safe-l)) max(16px, var(--safe-r)); overflow-y: auto; }
+.settings .panel { width: min(640px, 100%); gap: 14px; }
+.row { display: grid; grid-template-columns: minmax(120px, 200px) 1fr; gap: 12px; align-items: center; }
+.row label, .row .lbl { font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: .05em; }
+input[type=range] { width: 100%; accent-color: var(--yellow); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { font-weight: 800; font-size: 17px; padding: 6px 14px; background: var(--panel-2); border: 2px solid var(--line); text-transform: uppercase; letter-spacing: .04em; }
+.seg button[aria-pressed="true"] { background: var(--yellow); color: #160f00; border-color: #0c0912; }
+.binds { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.bind { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--panel-2); border: 2px solid var(--line); padding: 6px 6px 6px 10px; font-weight: 700; }
+.bind button { min-width: 64px; font-weight: 800; font-size: 16px; padding: 4px 8px; background: #0c0912; border: 2px solid var(--muted); }
+.bind button.waiting { border-color: var(--yellow); color: var(--yellow); }
+.fixed-keys { color: var(--muted); font-weight: 600; font-size: 15px; margin: 0; line-height: 1.4; }
+kbd { font-family: var(--ui); font-weight: 800; background: #0c0912; border: 1px solid var(--line); border-bottom-width: 3px; padding: 0 6px; border-radius: 3px; color: var(--text); }
+
+/* ---------- BATALHA ----------
+   Tela cheia. O canvas cobre tudo e a câmera (js/ui/battle-scene.js → layout) põe o chão logo
+   acima dos comandos. O HUD flutua no topo; os comandos flutuam sobre o piso, em três zonas:
+   movimento (esquerda) · habilidades (centro) · SOCO/CHUTE (direita).
+   Uma unidade só (--btn) dimensiona tudo, então arena e comandos se adaptam juntos. */
+.battle { --btn: clamp(46px, 14.5vh, 76px); --gap: clamp(6px, 1.4vh, 10px); --zone: calc(var(--btn) * 2 + var(--gap)); background: #07050b; overflow: hidden; }
+.stage-wrap { position: absolute; inset: 0; }
+.stage-box { position: absolute; inset: 0; --s: 1; overflow: hidden; }
+#arena { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hud-top { position: absolute; left: 0; right: 0; top: 0; z-index: 2; display: grid; grid-template-columns: 1fr auto 1fr; gap: calc(var(--s) * 16px); padding: calc(var(--s) * 12px + env(safe-area-inset-top, 0px)) max(calc(var(--s) * 18px), var(--safe-r)) 0 max(calc(var(--s) * 18px), var(--safe-l)); pointer-events: none; }
+.pblock { display: grid; grid-template-columns: auto 1fr; gap: calc(var(--s) * 10px); align-items: start; }
+.pblock.right { grid-template-columns: 1fr auto; }
+.pblock.right .pinfo { order: -1; }
+.pblock.right .pname { text-align: right; }
+.pport { width: calc(var(--s) * 92px); height: calc(var(--s) * 92px); border: calc(var(--s) * 4px) solid #0c0912; background: var(--c); box-shadow: 0 0 0 calc(var(--s) * 3px) var(--c2); transform: skewX(-6deg); overflow: hidden; }
+.pport img { width: 100%; height: 100%; display: block; transform: skewX(6deg) scale(1.12); }
+.pblock.right .pport img { transform: skewX(6deg) scale(-1.12, 1.12); }
+.pinfo { display: flex; flex-direction: column; gap: calc(var(--s) * 5px); min-width: 0; }
+.pname { font-family: var(--display); font-size: max(14px, calc(var(--s) * 38px)); line-height: .9; letter-spacing: .03em; -webkit-text-stroke: calc(var(--s) * 2px) #0c0912; paint-order: stroke fill; white-space: nowrap; }
+.hpbar { position: relative; height: max(10px, calc(var(--s) * 30px)); background: #0c0912; border: calc(var(--s) * 3px) solid #0c0912; outline: calc(var(--s) * 2px) solid rgba(255,255,255,.35); transform: skewX(-18deg); overflow: hidden; width: 100%; }
+.pblock.right .hpbar { transform: skewX(18deg); }
+.hpbar .trail, .hpbar .fill { position: absolute; top: 0; bottom: 0; left: 0; width: 100%; transform-origin: left; }
+.pblock.right .hpbar .trail, .pblock.right .hpbar .fill { left: auto; right: 0; transform-origin: right; }
+.hpbar .trail { background: #fff; transition: transform .5s .25s ease-out; }
+.hpbar .fill { background: linear-gradient(180deg, color-mix(in srgb, var(--c) 60%, #fff), var(--c) 55%, color-mix(in srgb, var(--c) 70%, #000)); }
+.hpbar.low .fill { animation: lowhp .5s steps(2) infinite; }
+@keyframes lowhp { 50% { filter: brightness(1.6); } }
+.subrow { display: flex; align-items: center; gap: calc(var(--s) * 10px); }
+.pblock.right .subrow { flex-direction: row-reverse; }
+.ftag { font-family: var(--display); font-size: max(10px, calc(var(--s) * 22px)); letter-spacing: .1em; padding: 0 calc(var(--s) * 10px); background: var(--c); border: calc(var(--s) * 2px) solid #0c0912; transform: skewX(-12deg); color: #fff; }
+.pips { display: flex; gap: calc(var(--s) * 6px); }
+.pips i { width: calc(var(--s) * 18px); height: calc(var(--s) * 18px); border-radius: 50%; border: calc(var(--s) * 3px) solid #0c0912; background: #3a3046; }
+.pips i.on { background: var(--yellow); box-shadow: 0 0 calc(var(--s) * 10px) var(--yellow); }
+.spbar { position: relative; flex: 1; height: max(7px, calc(var(--s) * 16px)); background: #0c0912; border: calc(var(--s) * 2px) solid #0c0912; transform: skewX(-18deg); overflow: hidden; max-width: 72%; }
+.pblock.right .spbar { transform: skewX(18deg); }
+.spbar .fill { position: absolute; inset: 0; transform-origin: left; background: linear-gradient(90deg, var(--c2), var(--yellow)); }
+.pblock.right .spbar .fill { transform-origin: right; }
+.spbar.full .fill { animation: spfull .35s linear infinite alternate; }
+@keyframes spfull { to { filter: brightness(1.7) saturate(1.3); } }
+.spbar .ticks { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), #0c0912 calc(25% - 2px) 25%); }
+.splbl { font-family: var(--display); font-size: max(10px, calc(var(--s) * 20px)); color: var(--yellow); -webkit-text-stroke: calc(var(--s) * 1.5px) #0c0912; paint-order: stroke fill; font-variant-numeric: tabular-nums; min-width: 3.4ch; }
+.timer { display: flex; flex-direction: column; align-items: center; gap: calc(var(--s) * 6px); }
+.timer .tv { font-family: var(--display); font-size: max(24px, calc(var(--s) * 70px)); line-height: .9; min-width: 1.6em; text-align: center; background: #0c0912; color: var(--yellow); padding: calc(var(--s) * 4px) calc(var(--s) * 12px) 0; border: calc(var(--s) * 3px) solid var(--yellow); font-variant-numeric: tabular-nums; }
+.timer .tv.warn { color: #ff5a4d; border-color: #ff5a4d; }
+.timer .rd { font-family: var(--display); font-size: max(10px, calc(var(--s) * 20px)); letter-spacing: .1em; color: #fff; -webkit-text-stroke: calc(var(--s) * 1.5px) #0c0912; paint-order: stroke fill; }
+.pause-btn { pointer-events: auto; font-family: var(--display); font-size: max(16px, calc(var(--s) * 22px)); width: max(36px, calc(var(--s) * 50px)); height: max(30px, calc(var(--s) * 38px)); background: rgba(12,9,18,.8); border: 2px solid var(--muted); }
+.pause-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.toast { position: absolute; z-index: 4; left: 50%; bottom: calc(var(--zone) + 28px); transform: translateX(-50%); font-weight: 800; font-size: max(15px, calc(var(--s) * 26px)); background: rgba(12,9,18,.92); border: 2px solid #ff5a4d; color: #ffd0cc; padding: .25em .9em; pointer-events: none; opacity: 0; transition: opacity .2s; white-space: nowrap; }
+.toast.show { opacity: 1; }
+
+/* comandos sobre o piso */
+.controls { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: end; column-gap: clamp(8px, 1.6vw, 18px);
+  padding: clamp(6px, 1.6vh, 12px) max(10px, var(--safe-r)) calc(clamp(6px, 1.6vh, 12px) + env(safe-area-inset-bottom, 0px)) max(10px, var(--safe-l));
+  padding-left: max(10px, var(--safe-l)); background: linear-gradient(180deg, rgba(7,5,11,0), rgba(7,5,11,.5) 40%, rgba(7,5,11,.72)); pointer-events: none; }
+.controls > * { pointer-events: auto; }
+.controls .pad { grid-column: 1; grid-row: 1; } .controls .skills { grid-column: 2; grid-row: 1; } .controls .basics { grid-column: 3; grid-row: 1; }
+.cbtn { position: relative; min-width: 0; min-height: 0; padding: 0; border: 3px solid #0c0912; border-radius: calc(var(--btn) * 0.24); background: linear-gradient(180deg, rgba(64,52,86,.94), rgba(28,21,40,.94)); box-shadow: 0 4px 0 #0c0912, inset 0 2px 0 rgba(255,255,255,.14); color: #fff; font-family: var(--display); font-size: calc(var(--btn) * 0.4); letter-spacing: .04em; line-height: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; touch-action: none; }
+.cbtn small { font-family: var(--ui); font-weight: 800; font-size: max(10px, calc(var(--btn) * 0.17)); color: rgba(255,255,255,.7); letter-spacing: .06em; }
+.cbtn::after { content: ''; position: absolute; inset: -4px; }
+.cbtn.is-down, .cbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0c0912; filter: brightness(1.25); }
+/* movimento: [▲ PULAR][DEF] / [◀][▶] */
+.pad { display: grid; grid-template-columns: repeat(2, calc(var(--btn) * 1.14)); grid-template-rows: repeat(2, var(--btn)); gap: var(--gap); touch-action: none; }
+.pad [data-press=jump] { grid-area: 1 / 1; } .pad .block { grid-area: 1 / 2; color: var(--blue-2); }
+.pad [data-hold=left] { grid-area: 2 / 1; } .pad [data-hold=right] { grid-area: 2 / 2; }
+.pad [data-hold=left], .pad [data-hold=right] { font-size: calc(var(--btn) * 0.5); }
+/* ataques: mesma largura e altura, empilhados */
+.basics { display: grid; grid-template-columns: clamp(116px, 16vw, 210px); grid-template-rows: repeat(2, var(--btn)); gap: var(--gap); }
+.cbtn.basic { border-radius: 999px; font-size: calc(var(--btn) * 0.46); background: linear-gradient(180deg, #ff5a4a, #c4161f 55%, #8f1219); box-shadow: 0 4px 0 #4a0b10, inset 0 2px 0 rgba(255,255,255,.3); }
+.cbtn.basic + .cbtn.basic { background: linear-gradient(180deg, #5cbcff, #1f6fe0 55%, #1747a0); box-shadow: 0 4px 0 #0a2148, inset 0 2px 0 rgba(255,255,255,.3); }
+.cbtn.basic small { color: rgba(255,255,255,.75); }
+/* habilidades: cartões uniformes; rola na horizontal se não couberem */
+.skills { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(84px, 11.5vw, 136px); gap: var(--gap); justify-content: safe center; height: var(--zone); overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; touch-action: pan-x; }
+.skills::-webkit-scrollbar { display: none; }
+.skill { --c: var(--red); position: relative; height: 100%; min-width: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto auto auto; justify-items: center; align-items: center; row-gap: 2px; text-align: center; padding: calc(var(--btn) * 0.08) 5px calc(var(--btn) * 0.1); border: 3px solid #0c0912; border-radius: 10px; background: linear-gradient(170deg, color-mix(in srgb, var(--c) 55%, #1b1426), #1b1426 75%); box-shadow: 0 4px 0 #0c0912, inset 0 0 0 2px color-mix(in srgb, var(--c) 75%, transparent); overflow: hidden; scroll-snap-align: start; transition: filter .15s, transform .08s; }
+.skill .ico { position: relative; height: 100%; max-height: calc(var(--btn) * 0.82); aspect-ratio: 1; display: grid; place-items: center; min-height: 0; }
+.skill .ico img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 0 rgba(0,0,0,.5)); }
+.skill .cdo { position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(rgba(5,3,10,.82) calc(var(--cd, 0) * 360deg), transparent 0); pointer-events: none; }
+.skill .state { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: calc(var(--btn) * 0.36); color: #fff; -webkit-text-stroke: 1.5px #0c0912; paint-order: stroke fill; pointer-events: none; font-variant-numeric: tabular-nums; }
+.skill .sn { width: 100%; font-weight: 800; font-size: clamp(11px, calc(var(--btn) * 0.2), 15px); line-height: 1.02; text-transform: uppercase; letter-spacing: .01em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+.skill .se { width: 100%; font-weight: 700; font-size: clamp(10px, calc(var(--btn) * 0.16), 12px); color: #ddd2ee; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.skill .sf { display: flex; gap: 6px; justify-content: center; font-weight: 800; font-size: clamp(10px, calc(var(--btn) * 0.17), 13px); line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.skill .cost { color: var(--yellow); }
+.skill .cdl { color: #9fd0ff; }
+.skill .key { position: absolute; top: 4px; right: 4px; font-weight: 800; font-size: 11px; line-height: 1.3; background: #0c0912; border: 1px solid var(--muted); padding: 0 4px; border-radius: 3px; }
+.skill .tag { position: absolute; top: 4px; left: 4px; display: none; font-weight: 800; font-size: 10px; line-height: 1.4; letter-spacing: .04em; padding: 0 5px; border-radius: 3px; background: #c4161f; color: #fff; border: 1px solid #0c0912; }
+/* indisponível: o ícone escurece e uma etiqueta aparece no canto; o texto fica legível */
+.skill.cooling .ico img, .skill.noenergy .ico img { filter: grayscale(.9) brightness(.6); }
+.skill.noenergy .tag { display: block; }
+.skill.noenergy .sn, .skill.cooling .sn { color: #d9d1e6; }
+.skill.busy { filter: brightness(.85); }
+.skill.ready.super { box-shadow: 0 4px 0 #0c0912, 0 0 0 3px var(--yellow), 0 0 22px var(--yellow); animation: superReady .5s ease-in-out infinite alternate; }
+@keyframes superReady { to { box-shadow: 0 4px 0 #0c0912, 0 0 0 3px #fff, 0 0 34px var(--orange); } }
+.skill.ready:hover { filter: brightness(1.15); }
+.skill:active, .skill.is-down { transform: translateY(3px); }
+.skill.fire { animation: fire .3s ease-out; }
+@keyframes fire { from { filter: brightness(2.2); } }
+.skill.deny { animation: deny .3s; }
+@keyframes deny { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@media (max-height: 400px) { .skill .se { display: none; } }
+@media (pointer: coarse) { .cbtn small.k, .skill .key { display: none; } }
+
+/* sobreposições */
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(8,4,16,.72); padding: 16px; z-index: 5; overflow-y: auto; }
+.ov-panel { background: var(--panel); border: 3px solid #0c0912; box-shadow: 0 0 0 3px var(--line), 0 18px 40px rgba(0,0,0,.6); padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; align-items: center; width: min(520px, 100%); text-align: center; }
+.ov-title { font-family: var(--display); font-size: clamp(44px, 7vw, 76px); line-height: .9; margin: 0; letter-spacing: .04em; -webkit-text-stroke: 2px #0c0912; paint-order: stroke fill; }
+.ov-panel .btn { width: 100%; font-size: 26px; }
+.ov-keys { color: var(--muted); font-weight: 600; font-size: 15px; line-height: 1.6; margin: 0; }
+.res-row { display: flex; align-items: center; gap: 14px; }
+.res-row img { width: 96px; height: 96px; border: 3px solid #0c0912; }
+.res-score { font-family: var(--display); font-size: 48px; color: var(--yellow); }
+.res-stats { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 16px; font-weight: 700; font-size: 16px; width: 100%; text-align: left; font-variant-numeric: tabular-nums; }
+.res-stats .h { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+.res-stats span:nth-child(3n+2), .res-stats span:nth-child(3n) { text-align: right; }
+
+.loading { position: fixed; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 40px; color: var(--yellow); background: var(--ink); z-index: 50; }
+
+@media (max-width: 980px) {
+  .sel-grid { grid-template-columns: 1fr 1fr; }
+  .roster-col { grid-column: 1 / -1; order: -1; }
+}
+@media (max-width: 760px) {
+  .sel-grid, .gallery .sel-grid { grid-template-columns: 1fr; }
+}
+/* menu e seleção em telas baixas */
+@media (max-height: 520px) and (orientation: landscape) {
+  .select { padding-block: 8px; }
+  .logo .l1, .logo .l3 { font-size: min(11vw, 17vh); }
+  .logo .vs { font-size: min(12vw, 19vh); }
+  .menu-inner { gap: 10px; }
+  .menu-buttons { flex-direction: row; width: auto; flex-wrap: wrap; justify-content: center; }
+  .btn { font-size: 24px; }
+  .disclaimer { font-size: 13px; }
+}
+@media (pointer: coarse) { .howto, .howto-h, .kb-only { display: none !important; } }
+/* ===== Luta só na horizontal: tela de rotação =====
+   O JavaScript (js/core/orientation.js) põe .need-rotate no <html> quando a luta está aberta
+   num aparelho de toque na vertical. A luta inteira some e só esta tela fica visível. */
+.rotate-overlay { display: none; position: fixed; inset: 0; z-index: 80; background: radial-gradient(circle at 50% 40%, #241a33, var(--ink) 70%); place-items: center; text-align: center; padding: max(24px, env(safe-area-inset-top, 0px)) 24px max(24px, env(safe-area-inset-bottom, 0px)); }
+.need-rotate .rotate-overlay { display: grid; }
+.need-rotate [data-screen=battle] { display: none !important; }
+.rotate-box { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.rotate-overlay .phone { position: relative; width: 58px; height: 100px; border: 5px solid var(--yellow); border-radius: 14px; box-shadow: 0 0 24px rgba(255,210,31,.35); animation: turn 2s ease-in-out infinite; }
+.rotate-overlay .phone::before { content: ''; position: absolute; left: 50%; top: 7px; width: 16px; height: 4px; margin-left: -8px; border-radius: 2px; background: var(--yellow); }
+.rotate-overlay .phone::after { content: ''; position: absolute; inset: 16px 6px; border-radius: 4px; background: linear-gradient(90deg, var(--red) 50%, var(--blue) 50%); opacity: .85; }
+@keyframes turn { 0%, 20% { transform: rotate(0); } 50%, 80% { transform: rotate(-90deg); } 100% { transform: rotate(0); } }
+.rotate-msg { margin: 0; font-family: var(--display); font-size: clamp(30px, 9vw, 44px); line-height: 1; letter-spacing: .04em; color: #fff; -webkit-text-stroke: 1.5px #0c0912; paint-order: stroke fill; text-wrap: balance; }
+.rotate-sub { margin: 0; color: var(--muted); font-weight: 600; font-size: 16px; max-width: 30ch; }
+.rotate-overlay .btn { font-size: 24px; }
+@media (prefers-reduced-motion: reduce) { .rotate-overlay .phone { animation: none; transform: rotate(-90deg); } }
+.about { color: var(--muted); font-weight: 600; font-size: 14px; line-height: 1.4; margin: 0; border-top: 1px solid var(--line); padding-top: 10px; }
+/* durante a luta, toques não viram seleção, zoom nem rolagem */
+.battle, .battle .controls, .cbtn { touch-action: none; -webkit-user-select: none; user-select: none; }
+.battle .skills, .battle .skill { touch-action: pan-x; }
+@media (prefers-reduced-motion: reduce) {
+  .logo .vs, .skill.ready.super, .spbar.full .fill, .hpbar.low .fill { animation: none; }
+}
+</style>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="loading" id="loading">CARREGANDO…</div>
+<div class="rotate-overlay" role="alertdialog" aria-labelledby="rotate-msg">
+  <div class="rotate-box">
+    <span class="phone" aria-hidden="true"></span>
+    <p class="rotate-msg" id="rotate-msg">Gire seu celular para jogar</p>
+    <p class="rotate-sub">A luta só funciona com o aparelho na horizontal. Ela continua de onde parou assim que você girar.</p>
+    <button class="btn primary" id="rotate-fs" hidden><span>JOGAR EM TELA CHEIA</span></button>
+  </div>
+</div>
+
+<!-- MENU PRINCIPAL -->
+<section class="screen menu" data-screen="menu" hidden>
+  <div class="menu-inner">
+    <h1 class="logo" aria-label="Esquerda vs Direita"><span class="l1">ESQUERDA</span><span class="vs">VS</span><span class="l3">DIREITA</span></h1>
+    <div class="tagline">A POLÍTICA TAMBÉM É UMA LUTA!</div>
+    <nav class="menu-buttons">
+      <button class="btn primary" id="btn-play"><span>JOGAR</span></button>
+      <button class="btn" id="btn-chars"><span>PERSONAGENS</span></button>
+      <button class="btn" id="btn-settings"><span>CONFIGURAÇÕES</span></button>
+    </nav>
+    <p class="disclaimer"><b>Sátira fictícia.</b> Os lutadores são personagens inventados e não representam pessoas reais. Os golpes são piadas e não acusam ninguém de nada.</p>
+  </div>
+</section>
+
+<!-- SELEÇÃO / GALERIA -->
+<section class="screen select" data-screen="select" hidden>
+  <header class="sel-head">
+    <h2 class="sel-title" id="sel-title">ESCOLHA SEU LUTADOR</h2>
+    <button class="btn small" id="sel-back"><span>◀ VOLTAR</span></button>
+  </header>
+  <div class="sel-grid">
+    <div class="panel p1-col">
+      <h3 id="p1-label">JOGADOR 1</h3>
+      <div class="preview" id="p1-prev"><canvas id="p1-canvas" width="480" height="360"></canvas></div>
+      <div class="who"><span class="nm" id="p1-name"></span><span class="chip" id="p1-fac"></span></div>
+      <p class="desc" id="p1-desc"></p>
+      <div class="stats" id="p1-stats"></div>
+      <div class="moves" id="p1-moves"></div>
+    </div>
+    <div class="panel roster-col">
+      <h3>LUTADORES</h3>
+      <div class="roster" id="roster"></div>
+      <p class="roster-note" id="roster-note">Clique para escolher. Use as setas ← → e Enter no teclado.</p>
+      <h3 class="howto-h">COMO JOGAR</h3>
+      <dl class="howto">
+        <dt><kbd>A</kbd> <kbd>D</kbd></dt><dd>Andar (ou ◀ ▶ na tela)</dd>
+        <dt><kbd>Espaço</kbd></dt><dd>Pular</dd>
+        <dt><kbd>Shift</kbd></dt><dd>Defender: reduz o dano e anula atordoamentos</dd>
+        <dt><kbd id="ht-p">J</kbd> <kbd id="ht-k">K</kbd></dt><dd>Soco e chute: grátis, enchem a energia</dd>
+        <dt><kbd id="ht-s1">1</kbd>–<kbd id="ht-s4">4</kbd></dt><dd>Habilidades (ou clique nos botões de baixo). O supremo pede a barra ⚡ cheia.</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Pausar</dd>
+      </dl>
+    </div>
+    <div class="panel cpu-col">
+      <h3>ADVERSÁRIO (CPU)</h3>
+      <div class="preview" id="cpu-prev"><canvas id="cpu-canvas" width="480" height="360"></canvas></div>
+      <div class="cpu-pick">
+        <button class="arrow" id="cpu-prev-btn" aria-label="Adversário anterior">◀</button>
+        <div class="who"><span class="nm" id="cpu-name"></span><span class="chip" id="cpu-fac"></span></div>
+        <button class="arrow" id="cpu-next-btn" aria-label="Próximo adversário">▶</button>
+      </div>
+      <p class="desc" id="cpu-desc"></p>
+      <div class="stats" id="cpu-stats"></div>
+    </div>
+  </div>
+  <footer class="sel-foot">
+    <button class="btn primary confirm-btn" id="sel-confirm"><span>CONFIRMAR PERSONAGEM ▶</span></button>
+  </footer>
+</section>
+
+<!-- CONFIGURAÇÕES -->
+<section class="screen settings" data-screen="settings" hidden>
+  <div class="panel">
+    <h2 class="sel-title">CONFIGURAÇÕES</h2>
+    <div class="row"><label for="set-music">Música</label><input type="range" id="set-music" min="0" max="1" step="0.05"></div>
+    <div class="row"><label for="set-sfx">Efeitos</label><input type="range" id="set-sfx" min="0" max="1" step="0.05"></div>
+    <div class="row"><span class="lbl">Dificuldade</span><div class="seg" id="set-diff"></div></div>
+    <div class="row"><span class="lbl">Tempo da rodada</span><div class="seg" id="set-time"></div></div>
+    <div class="row"><span class="lbl">Tremor de tela</span><div class="seg" id="set-shake"></div></div>
+    <div class="row" id="row-haptics" hidden><span class="lbl">Vibração</span><div class="seg" id="set-haptics"></div></div>
+    <div class="kb-only"><span class="lbl" style="font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.05em">Teclas de ataque</span>
+      <div class="binds" id="set-binds" style="margin-top:8px"></div></div>
+    <p class="fixed-keys kb-only">Fixas: <kbd>A</kbd>/<kbd>D</kbd> andar · <kbd>Espaço</kbd> pular · <kbd>Shift</kbd> defender · <kbd>Esc</kbd> pausar. Clique numa tecla acima e pressione a nova.</p>
+    <p class="about">Esquerda vs Direita · versão 1.0. Sátira com personagens fictícios. O jogo não coleta, não envia e não compartilha nenhum dado: suas configurações ficam só neste aparelho. Sem anúncios e sem compras. Fontes Bangers e Barlow Condensed sob a SIL Open Font License.</p>
+    <div class="sel-foot">
+      <button class="btn small" id="set-reset"><span>RESTAURAR PADRÕES</span></button>
+      <button class="btn small primary" id="set-back"><span>◀ VOLTAR</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- BATALHA -->
+<section class="screen battle" data-screen="battle" hidden>
+  <div class="stage-wrap" id="stage-wrap">
+    <div class="stage-box" id="stage-box">
+      <canvas id="arena"></canvas>
+      <div class="hud-top">
+        <div class="pblock left" id="hud-p0"></div>
+        <div class="timer"><div class="tv" id="hud-timer">60</div><div class="rd" id="hud-round">ROUND 1</div><button class="pause-btn" id="btn-pause" aria-label="Pausar">II</button></div>
+        <div class="pblock right" id="hud-p1"></div>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="overlay" id="ov-pause" hidden>
+        <div class="ov-panel">
+          <h2 class="ov-title" style="color:var(--yellow)">PAUSADO</h2>
+          <button class="btn primary" id="pz-resume"><span>CONTINUAR</span></button>
+          <button class="btn" id="pz-restart"><span>REINICIAR LUTA</span></button>
+          <button class="btn" id="pz-select"><span>TROCAR PERSONAGEM</span></button>
+          <button class="btn" id="pz-menu"><span>MENU PRINCIPAL</span></button>
+          <p class="ov-keys kb-only" id="pz-keys"></p>
+        </div>
+      </div>
+      <div class="overlay" id="ov-result" hidden>
+        <div class="ov-panel">
+          <h2 class="ov-title" id="res-title">VITÓRIA!</h2>
+          <div class="res-row"><img id="res-p0" alt=""><span class="res-score" id="res-score">2 × 0</span><img id="res-p1" alt=""></div>
+          <div class="res-stats" id="res-stats"></div>
+          <button class="btn primary" id="res-again"><span>REVANCHE</span></button>
+          <button class="btn" id="res-select"><span>TROCAR PERSONAGEM</span></button>
+          <button class="btn" id="res-menu"><span>MENU PRINCIPAL</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="controls" id="controls">
+    <div class="group pad" data-pad>
+      <button class="cbtn" data-hold="left" aria-label="Andar para a esquerda">◀<small class="k">A</small></button>
+      <button class="cbtn" data-press="jump" aria-label="Pular">▲<small>PULAR</small></button>
+      <button class="cbtn" data-hold="right" aria-label="Andar para a direita">▶<small class="k">D</small></button>
+      <button class="cbtn block" data-hold="block" aria-label="Defender">DEF<small class="k">SHIFT</small></button>
+    </div>
+    <div class="group basics">
+      <button class="cbtn basic" data-press="punch" data-repeat id="btn-punch">SOCO<small class="k" id="k-punch">J</small></button>
+      <button class="cbtn basic" data-press="kick" data-repeat id="btn-kick">CHUTE<small class="k" id="k-kick">K</small></button>
+    </div>
+    <div class="skills" id="skills"></div>
+  </div>
+</section>
+
+<script src="js/data/characters.js"></script>
+<script src="js/core/settings.js"></script>
+<script src="js/core/native.js"></script>
+<script src="js/core/orientation.js"></script>
+<script src="js/core/scenes.js"></script>
+<script src="js/core/input.js"></script>
+<script src="js/audio/audio.js"></script>
+<script src="js/render/art.js"></script>
+<script src="js/render/stage.js"></script>
+<script src="js/fx/effects.js"></script>
+<script src="js/combat/combat.js"></script>
+<script src="js/combat/abilities.js"></script>
+<script src="js/combat/fighter.js"></script>
+<script src="js/combat/ai.js"></script>
+<script src="js/combat/battle.js"></script>
+<script src="js/ui/menu.js"></script>
+<script src="js/ui/select.js"></script>
+<script src="js/ui/settings-screen.js"></script>
+<script src="js/ui/hud.js"></script>
+<script src="js/ui/battle-scene.js"></script>
+<script src="js/main.js"></script>

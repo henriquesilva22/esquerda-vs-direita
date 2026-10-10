@@ -1,0 +1,27 @@
+{
+  "name": "esquerda-vs-direita",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Esquerda vs Direita — jogo de luta 2D (sátira fictícia) empacotado com Capacitor para iOS e Android",
+  "scripts": {
+    "build": "node scripts/build-www.mjs",
+    "assets": "capacitor-assets generate --iconBackgroundColor '#0c0912' --iconBackgroundColorDark '#0c0912' --splashBackgroundColor '#0c0912' --splashBackgroundColorDark '#0c0912'",
+    "setup:ios": "npm run build && npx cap add ios --packagemanager SPM && npm run assets && node scripts/configure-native.mjs && npx cap sync ios",
+    "setup:android": "npm run build && npx cap add android && npm run assets && node scripts/configure-native.mjs && npx cap sync android",
+    "ios": "npm run build && npx cap sync ios && npx cap open ios",
+    "android": "npm run build && npx cap sync android && npx cap open android",
+    "serve": "npm run build && npx --yes http-server www -p 8080 -c-1"
+  },
+  "dependencies": {
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

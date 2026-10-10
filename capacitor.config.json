@@ -1,0 +1,18 @@
+{
+  "appId": "br.com.seunome.esquerdavsdireita",
+  "appName": "Esquerda vs Direita",
+  "webDir": "www",
+  "backgroundColor": "#0c0912",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#0c0912",
+    "scrollEnabled": false,
+    "allowsLinkPreview": false
+  },
+  "android": {
+    "backgroundColor": "#0c0912"
+  },
+  "plugins": {
+    "StatusBar": { "overlaysWebView": true, "style": "DARK" }
+  }
+}

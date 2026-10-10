@@ -1,0 +1,8 @@
+/* Fontes embutidas (SIL Open Font License — ver OFL-*.txt) para o jogo funcionar offline no app */
+@font-face { font-family: 'Bangers'; src: url('Bangers-Regular.ttf') format('truetype'); font-weight: 400; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-Medium.ttf') format('truetype'); font-weight: 500; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-SemiBold.ttf') format('truetype'); font-weight: 600; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-Bold.ttf') format('truetype'); font-weight: 700; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-ExtraBold.ttf') format('truetype'); font-weight: 800; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: block; }
+@font-face { font-family: 'Barlow Condensed'; src: url('BarlowCondensed-ExtraBoldItalic.ttf') format('truetype'); font-weight: 800; font-style: italic; font-display: block; }

@@ -1,0 +1,5 @@
+debug.keystore — chave de TESTE (a "debug key" padrão do Android: senha "android", alias "androiddebugkey").
+Ela fica no repositório de propósito: assim todo APK gerado pelo GitHub Actions tem a mesma assinatura
+e você consegue atualizar o app no celular sem desinstalar.
+NÃO use esta chave para publicar na Google Play. Para a loja, crie uma chave própria (veja PUBLICAR.md)
+e guarde-a fora do repositório.
