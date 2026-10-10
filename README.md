@@ -4,16 +4,17 @@ Jogo de luta 2D no estilo arcade com sátira política fictícia. Os quatro luta
 
 ## Baixar no celular
 
-**Android (APK):** abra no celular  
-👉 https://github.com/henriquesilva22/esquerda-vs-direita/releases/latest/download/EsquerdaVsDireita.apk  
-Depois abra o arquivo baixado e toque em **Instalar**. Se o Android pedir, permita "instalar apps desta fonte".
+**Android (APK), download direto:** abra no **Chrome** do celular  
+👉 https://raw.githubusercontent.com/henriquesilva22/esquerda-vs-direita/apk/EsquerdaVsDireita.apk  
+O download começa na hora. Depois abra o arquivo e toque em **Instalar** (se o Android pedir, permita "instalar apps desta fonte").
 
-**Qualquer celular (Android ou iPhone), pelo navegador:**  
-👉 https://henriquesilva22.github.io/esquerda-vs-direita/  
-- Android (Chrome): menu ⋮ → **Instalar app** (ou "Adicionar à tela inicial").
-- iPhone (Safari): botão Compartilhar → **Adicionar à Tela de Início**.
+> Evite abrir links do `github.com` no celular para baixar: eles costumam abrir o app do GitHub, que fica carregando sem baixar. O link acima não passa por ele.
 
-Instalado assim, o jogo abre em tela cheia, na horizontal, e funciona sem internet.
+**Página de download e versão web (Android ou iPhone):**  
+👉 https://henriquesilva22.github.io/esquerda-vs-direita/baixar.html  
+👉 Jogar no navegador: https://henriquesilva22.github.io/esquerda-vs-direita/
+- Android (Chrome): menu ⋮ → **Instalar app**.
+- iPhone (Safari): Compartilhar → **Adicionar à Tela de Início**.
 
 ## Como os arquivos são gerados
 
@@ -21,8 +22,8 @@ A cada envio para a branch `main`, o GitHub Actions faz duas coisas sozinho:
 
 | Workflow | O que faz | Onde aparece |
 |---|---|---|
-| `APK Android` (`.github/workflows/android-apk.yml`) | Monta o projeto Android com Capacitor e compila o APK | Aba **Releases** |
-| `Site (GitHub Pages)` (`.github/workflows/site.yml`) | Publica a versão web instalável | `henriquesilva22.github.io/esquerda-vs-direita` |
+| `APK Android` (`.github/workflows/android-apk.yml`) | Monta o projeto Android com Capacitor e compila o APK | Link direto (branch `apk`) e aba **Releases** |
+| `Site (GitHub Pages)` (`.github/workflows/site.yml`) | Depois do APK, publica a versão web e a página de download | `henriquesilva22.github.io/esquerda-vs-direita` |
 
 O APK é um **build de teste**, assinado com a chave de depuração em `android-config/` (sempre a mesma, para você poder atualizar o app sem desinstalar). Para publicar na Google Play ou na App Store, siga `PUBLICAR.md`.
 

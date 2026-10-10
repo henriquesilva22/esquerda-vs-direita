@@ -64,6 +64,22 @@ jobs:
           ./gradlew assembleDebug --no-daemon --stacktrace
           cp app/build/outputs/apk/debug/app-debug.apk ../EsquerdaVsDireita.apk
 
+      # Link de download DIRETO (fora do github.com, que no celular costuma abrir o app do GitHub
+      # e travar): o APK vai sozinho para a branch "apk" e é servido por raw.githubusercontent.com.
+      # https://raw.githubusercontent.com/<usuário>/<repositório>/apk/EsquerdaVsDireita.apk
+      - name: Publicar link de download direto (branch apk)
+        run: |
+          mkdir apkbranch
+          cp EsquerdaVsDireita.apk apkbranch/
+          cd apkbranch
+          printf '# APK do Esquerda vs Direita\n\nVersão 1.0.%s. Esta branch é gerada automaticamente pelo workflow "APK Android"; não edite.\n' "${{ github.run_number }}" > README.md
+          git init -q -b apk
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "APK 1.0.${{ github.run_number }}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" apk
+
       - name: Publicar em Releases
         uses: softprops/action-gh-release@v2
         with:
@@ -74,8 +90,11 @@ jobs:
           body: |
             APK de teste do jogo **Esquerda vs Direita** para Android.
 
+            **Download direto (recomendado no celular):**
+            https://raw.githubusercontent.com/${{ github.repository }}/apk/EsquerdaVsDireita.apk
+
             **Como instalar no celular**
-            1. Abra este link no celular e toque em `EsquerdaVsDireita.apk` para baixar.
+            1. Abra o link acima no Chrome do celular; o download começa na hora.
             2. Abra o arquivo baixado. Se o Android pedir, permita "instalar apps desta fonte".
             3. Toque em Instalar e abra o jogo.
 
